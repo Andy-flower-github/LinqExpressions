@@ -20,7 +20,7 @@ namespace Andy.Data
 
     public static class ExpressionExtras
     {
-        private static bool HasValue(this object sender) => !(sender == null || string.IsNullOrWhiteSpace(sender.ToString()));
+        private static bool HasValue(this object sender) => !string.IsNullOrWhiteSpace(sender?.ToString());
 
         #region MaybeAnd
         /// <summary>

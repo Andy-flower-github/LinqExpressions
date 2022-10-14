@@ -255,6 +255,15 @@ namespace Andy.Data
         /// </summary>
         public static Expression Contains(ParameterExpression paramater, string property, object value)
            => Expression.Call(Left(paramater, property), GetMethodInfo<String>(nameof(string.Contains)), Right(paramater, property, value));
+        
+        /// <summary>
+        /// Andy -> DbFunctions.Like(x.Left, Right) ** Right 要自加 %
+        /// </summary>
+        public static Expression Like(ParameterExpression paramater, string property, object value)
+        {
+            var likeMethod = typeof(DbFunctions).GetMethods().First(x => x.Name == "Like" && x.GetParameters().Length == 2);
+            return Expression.Call(likeMethod, Left(paramater, property), Right(paramater, property, value));
+        }
 
         /// <summary>
         /// Andy -> x.Left.StartsWith(Riht)
@@ -278,6 +287,13 @@ namespace Andy.Data
         /// <summary>
         /// Andy -> 利用 Function Name 取得指定型別 T 的 MethodInfo
         /// </summary>
-        public static MethodInfo GetMethodInfo<T>(string name) => typeof(T).GetMethod(name, new Type[] { typeof(T) });
+        public static MethodInfo GetMethodInfo<T>(string name) 
+            => typeof(T).GetMethods().First(x => x.Name == name);
+
+        /// <summary>
+        /// Andy -> 利用 Function Name 取得指定型別 T 的 MethodInfo, 如果有多載後面要傳參數的型別
+        /// </summary>
+        public static MethodInfo GetMethodInfo<T>(string name, params Type[] types)
+            => typeof(T).GetMethod(name, types);
     }
 }

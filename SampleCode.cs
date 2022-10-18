@@ -29,8 +29,8 @@ public void Test()
                          .And(Expr.Like, nameof(Customer.CustomerID), "%700%")
                          .And(Expr.StartsWith, nameof(Customer.CustomerID), "H")
                          .And(Expr.GreaterThan, nameof(Customer.PayDay), (byte)20)
-                         .MaybeAnd(myExpr.MaybeOr(Expr.Contains, nameof(Customer.CustomerName), "醫院")
-                                         .MaybeOr(Expr.Contains, nameof(Customer.CustomerName), "診所")
+                         .MaybeAnd(myExpr.Or(Expr.Contains, nameof(Customer.CustomerName), "醫院")
+                                         .Or(Expr.Contains, nameof(Customer.CustomerName), "診所")
                                          .BodyExpr)
                          .GetLambda();
 }
